@@ -19,7 +19,7 @@ A machine learning web application that predicts whether a breast mass is benign
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/Breast-Cancer-Predictor.git
-cd Breast-Cancer-Predictor
+cd BreastCancer-Predictor
 ```
 
 2. Create and activate a virtual environment:
