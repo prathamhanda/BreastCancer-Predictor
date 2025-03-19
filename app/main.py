@@ -16,7 +16,7 @@ def get_clean_data():
 
 
 def add_sidebar():
-  st.sidebar.header("Cell Nuclei Measurements")
+  st.sidebar.markdown("<h2 style='color:#f8f9fa;'> Cell Nuclei Measurements</h2>", unsafe_allow_html=True)
   
   data = get_clean_data()
   
@@ -102,7 +102,7 @@ def get_radar_chart(input_data):
         ],
         theta=categories,
         fill='toself',
-        name='Mean Value'
+        name='Mean Value',
   ))
   fig.add_trace(go.Scatterpolar(
         r=[
@@ -112,7 +112,8 @@ def get_radar_chart(input_data):
         ],
         theta=categories,
         fill='toself',
-        name='Standard Error'
+        name='Standard Error',
+        
   ))
   fig.add_trace(go.Scatterpolar(
         r=[
@@ -123,7 +124,8 @@ def get_radar_chart(input_data):
         ],
         theta=categories,
         fill='toself',
-        name='Worst Value'
+        name='Worst Value',
+        
   ))
 
   fig.update_layout(
@@ -132,7 +134,8 @@ def get_radar_chart(input_data):
         visible=True,
         range=[0, 1]
       )),
-    showlegend=True
+    showlegend=True,
+    template="plotly_dark"
   )
   
   return fig
@@ -149,6 +152,7 @@ def add_predictions(input_data):
   prediction = model.predict(input_array_scaled)
   
   st.subheader("Cell cluster prediction")
+  st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
   st.write("The cell cluster is:")
   
   if prediction[0] == 0:
