@@ -18,15 +18,15 @@ A machine learning web application that predicts whether a breast mass is benign
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Breast-Cancer-Predictor.git
-cd Breast-Cancer-Predictor
+git clone https://github.com/prathamhanda/BreastCancer-Predictor.git
+cd BreastCancer-Predictor
 ```
 
 2. Create and activate a virtual environment:
 
 For Windows:
 ```bash
-cd /e/AI\ Project/Breast-Cancer-Predictor && pip install numpy pandas scikit-learn streamlit plotly pickle5 altair
+pip install numpy pandas scikit-learn streamlit plotly pickle5 altair
 ```
 
 ```bash
@@ -34,7 +34,7 @@ python -m venv .venv
 ```
 
 ```bash
-cd /e/AI\ Project/Breast-Cancer-Predictor && source .venv/Scripts/activate
+source .venv/Scripts/activate
 ```
 
 ```bash
@@ -42,7 +42,7 @@ python -m pip install streamlit
 ```
 
 ```bash
-cd /e/AI\ Project/Breast-Cancer-Predictor && pip install plotly scikit-learn
+pip install plotly scikit-learn
 ```
 
 ```bash
