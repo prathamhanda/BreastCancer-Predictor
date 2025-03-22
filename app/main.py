@@ -144,6 +144,9 @@ def get_radar_chart(input_data):
 
 def add_predictions(input_data):
   try:
+    import warnings
+    warnings.filterwarnings('ignore')
+    
     # Get the absolute path to the model directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
@@ -160,14 +163,30 @@ def add_predictions(input_data):
       st.error("Error: Model files not found. Please ensure model files are properly uploaded.")
       return
     except Exception as e:
-      st.error(f"Error loading model: {str(e)}")
+      # Try to handle version incompatibility
+      try:
+        import joblib
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
+      except Exception as joblib_error:
+        st.error(f"Error loading model. Please ensure model compatibility: {str(e)}")
+        return
+    
+    # Convert input data to float32 for better compatibility
+    input_array = np.array(list(input_data.values()), dtype=np.float32).reshape(1, -1)
+    
+    try:
+      input_array_scaled = scaler.transform(input_array)
+    except Exception as scale_error:
+      st.error("Error scaling input data. Please check input values.")
       return
     
-    input_array = np.array(list(input_data.values())).reshape(1, -1)
-    
-    input_array_scaled = scaler.transform(input_array)
-    
-    prediction = model.predict(input_array_scaled)
+    try:
+      prediction = model.predict(input_array_scaled)
+      proba = model.predict_proba(input_array_scaled)[0]
+    except Exception as pred_error:
+      st.error("Error making prediction. Please check model compatibility.")
+      return
     
     st.subheader("Cell cluster prediction")
     st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
@@ -178,14 +197,13 @@ def add_predictions(input_data):
     else:
       st.error("⚠️ The tumor is likely **Malignant**.")
       
-    proba = model.predict_proba(input_array_scaled)[0]
     st.write("Probability of being benign: ", f"{proba[0]:.2%}")
     st.write("Probability of being malicious: ", f"{proba[1]:.2%}")
     
     st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
   
   except Exception as e:
-    st.error(f"An error occurred: {str(e)}")
+    st.error(f"An unexpected error occurred: {str(e)}")
     return
 
 
