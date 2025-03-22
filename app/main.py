@@ -3,12 +3,14 @@ import pickle
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
+import os
 
 
 def get_clean_data():
-  data = pd.read_csv("data/data.csv")
-  
-  data = data.drop(['Unnamed: 32', 'id'], axis=1)
+  data_path = os.path.join(os.path.dirname(__file__), "../data/data.csv")
+  data = pd.read_csv(data_path)
+  drop_columns = ['Unnamed: 32', 'id']
+  data = data.drop(columns=[col for col in drop_columns if col in data.columns], errors='ignore')
   
   data['diagnosis'] = data['diagnosis'].map({ 'M': 1, 'B': 0 })
   
@@ -142,9 +144,18 @@ def get_radar_chart(input_data):
 
 
 def add_predictions(input_data):
-  model = pickle.load(open("model/model.pkl", "rb"))
-  scaler = pickle.load(open("model/scaler.pkl", "rb"))
-  
+  model_path = os.path.join(os.path.dirname(__file__), "../model/model.pkl")
+  scaler_path = os.path.join(os.path.dirname(__file__), "../model/scaler.pkl")
+  if not os.path.exists(model_path):
+        st.error("⚠️ Model file is missing! Ensure `model.pkl` is in the `model/` directory.")
+        return
+
+  if not os.path.exists(scaler_path):
+        st.error("⚠️ Scaler file is missing! Ensure `scaler.pkl` is in the `model/` directory.")
+        return
+
+  model = pickle.load(open(model_path, "rb"))
+  scaler = pickle.load(open(scaler_path, "rb"))
   input_array = np.array(list(input_data.values())).reshape(1, -1)
   
   input_array_scaled = scaler.transform(input_array)
@@ -161,8 +172,8 @@ def add_predictions(input_data):
     st.error("⚠️ The tumor is likely **Malignant**.")
     
   
-  st.write("Probability of being benign: ", model.predict_proba(input_array_scaled)[0][0])
-  st.write("Probability of being malicious: ", model.predict_proba(input_array_scaled)[0][1])
+  st.write("Probability of being benign: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][0] * 100))
+  st.write("Probability of being malignant: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][1] * 100))
   
   st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
 
@@ -176,8 +187,10 @@ def main():
     initial_sidebar_state="expanded"
   )
   
-  with open("assets/style.css") as f:
-    st.markdown("<style>{}</style>".format(f.read()), unsafe_allow_html=True)
+  style_path = os.path.join(os.path.dirname(__file__), "../assets/style.css")
+  if os.path.exists(style_path):
+        with open(style_path) as f:
+            st.markdown("<style>{}</style>".format(f.read()), unsafe_allow_html=True)
   
   input_data = add_sidebar()
   
