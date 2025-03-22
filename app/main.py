@@ -3,6 +3,7 @@ import pickle
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
+import os
 
 
 def get_clean_data():
@@ -142,30 +143,50 @@ def get_radar_chart(input_data):
 
 
 def add_predictions(input_data):
-  model = pickle.load(open("model/model.pkl", "rb"))
-  scaler = pickle.load(open("model/scaler.pkl", "rb"))
-  
-  input_array = np.array(list(input_data.values())).reshape(1, -1)
-  
-  input_array_scaled = scaler.transform(input_array)
-  
-  prediction = model.predict(input_array_scaled)
-  
-  st.subheader("Cell cluster prediction")
-  st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
-  st.write("The cell cluster is:")
-  
-  if prediction[0] == 0:
-    st.success("✅ The tumor is likely **Benign**.")
-  else:
-    st.error("⚠️ The tumor is likely **Malignant**.")
+  try:
+    # Get the absolute path to the model directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    model_path = os.path.join(parent_dir, "model", "model.pkl")
+    scaler_path = os.path.join(parent_dir, "model", "scaler.pkl")
     
+    # Load model and scaler with error handling
+    try:
+      with open(model_path, "rb") as model_file:
+        model = pickle.load(model_file)
+      with open(scaler_path, "rb") as scaler_file:
+        scaler = pickle.load(scaler_file)
+    except FileNotFoundError as e:
+      st.error("Error: Model files not found. Please ensure model files are properly uploaded.")
+      return
+    except Exception as e:
+      st.error(f"Error loading model: {str(e)}")
+      return
+    
+    input_array = np.array(list(input_data.values())).reshape(1, -1)
+    
+    input_array_scaled = scaler.transform(input_array)
+    
+    prediction = model.predict(input_array_scaled)
+    
+    st.subheader("Cell cluster prediction")
+    st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
+    st.write("The cell cluster is:")
+    
+    if prediction[0] == 0:
+      st.success("✅ The tumor is likely **Benign**.")
+    else:
+      st.error("⚠️ The tumor is likely **Malignant**.")
+      
+    proba = model.predict_proba(input_array_scaled)[0]
+    st.write("Probability of being benign: ", f"{proba[0]:.2%}")
+    st.write("Probability of being malicious: ", f"{proba[1]:.2%}")
+    
+    st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
   
-  st.write("Probability of being benign: ", model.predict_proba(input_array_scaled)[0][0])
-  st.write("Probability of being malicious: ", model.predict_proba(input_array_scaled)[0][1])
-  
-  st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
-
+  except Exception as e:
+    st.error(f"An error occurred: {str(e)}")
+    return
 
 
 def main():
