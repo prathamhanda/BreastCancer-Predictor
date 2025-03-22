@@ -11,7 +11,7 @@ if not os.path.exists('model'):
     os.makedirs('model')
 
 # Load and prepare data
-data = pd.read_csv("data/data.csv")
+data = pd.read_csv("data\\data.csv")
 data = data.drop(['Unnamed: 32', 'id'], axis=1)
 data['diagnosis'] = data['diagnosis'].map({ 'M': 1, 'B': 0 })
 

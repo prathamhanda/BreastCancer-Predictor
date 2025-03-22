@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
 import os
+import joblib
 
 
 def get_clean_data():
@@ -153,9 +154,11 @@ def add_predictions(input_data):
   if not os.path.exists(scaler_path):
         st.error("⚠️ Scaler file is missing! Ensure `scaler.pkl` is in the `model/` directory.")
         return
+  model = joblib.load(model_path)
+  # with open(model_path, "rb") as f:
+  #   model = pickle.load(f)
 
-  model = pickle.load(open(model_path, "rb"))
-  scaler = pickle.load(open(scaler_path, "rb"))
+  scaler = joblib.load(scaler_path)
   input_array = np.array(list(input_data.values())).reshape(1, -1)
   
   input_array_scaled = scaler.transform(input_array)
@@ -172,6 +175,7 @@ def add_predictions(input_data):
     st.error("⚠️ The tumor is likely **Malignant**.")
   st.write("Probability of being benign: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][0] * 100))
   st.write("Probability of being malignant: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][1] * 100))
+  st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
 #   try:
 #     import warnings
 #     warnings.filterwarnings('ignore')
