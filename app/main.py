@@ -7,14 +7,14 @@ import os
 
 
 def get_clean_data():
-  data_path = os.path.join(os.path.dirname(__file__), "../data/data.csv")
-  data = pd.read_csv(data_path)
-  drop_columns = ['Unnamed: 32', 'id']
-  data = data.drop(columns=[col for col in drop_columns if col in data.columns], errors='ignore')
-  
-  data['diagnosis'] = data['diagnosis'].map({ 'M': 1, 'B': 0 })
-  
-  return data
+    data_path = os.path.join(os.path.dirname(__file__), "../data/data.csv")
+    data = pd.read_csv(data_path)
+    drop_columns = ['Unnamed: 32', 'id']
+    data = data.drop(columns=[col for col in drop_columns if col in data.columns], errors='ignore')
+
+    data['diagnosis'] = data['diagnosis'].map({'M': 1, 'B': 0})
+    
+    return data
 
 
 def add_sidebar():
@@ -144,7 +144,6 @@ def get_radar_chart(input_data):
 
 
 def add_predictions(input_data):
-<<<<<<< HEAD
   model_path = os.path.join(os.path.dirname(__file__), "../model/model.pkl")
   scaler_path = os.path.join(os.path.dirname(__file__), "../model/scaler.pkl")
   if not os.path.exists(model_path):
@@ -171,80 +170,78 @@ def add_predictions(input_data):
     st.success("✅ The tumor is likely **Benign**.")
   else:
     st.error("⚠️ The tumor is likely **Malignant**.")
-=======
-  try:
-    import warnings
-    warnings.filterwarnings('ignore')
->>>>>>> 9036baf7e5670aca32c40c4234637e243e01dff0
-    
-    # Get the absolute path to the model directory
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(current_dir)
-    model_path = os.path.join(parent_dir, "model", "model.pkl")
-    scaler_path = os.path.join(parent_dir, "model", "scaler.pkl")
-    
-    # Load model and scaler with error handling
-    try:
-      with open(model_path, "rb") as model_file:
-        model = pickle.load(model_file)
-      with open(scaler_path, "rb") as scaler_file:
-        scaler = pickle.load(scaler_file)
-    except FileNotFoundError as e:
-      st.error("Error: Model files not found. Please ensure model files are properly uploaded.")
-      return
-    except Exception as e:
-      # Try to handle version incompatibility
-      try:
-        import joblib
-        model = joblib.load(model_path)
-        scaler = joblib.load(scaler_path)
-      except Exception as joblib_error:
-        st.error(f"Error loading model. Please ensure model compatibility: {str(e)}")
-        return
-    
-    # Convert input data to float32 for better compatibility
-    input_array = np.array(list(input_data.values()), dtype=np.float32).reshape(1, -1)
-    
-    try:
-      input_array_scaled = scaler.transform(input_array)
-    except Exception as scale_error:
-      st.error("Error scaling input data. Please check input values.")
-      return
-    
-    try:
-      prediction = model.predict(input_array_scaled)
-      proba = model.predict_proba(input_array_scaled)[0]
-    except Exception as pred_error:
-      st.error("Error making prediction. Please check model compatibility.")
-      return
-    
-    st.subheader("Cell cluster prediction")
-    st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
-    st.write("The cell cluster is:")
-    
-    if prediction[0] == 0:
-      st.success("✅ The tumor is likely **Benign**.")
-    else:
-      st.error("⚠️ The tumor is likely **Malignant**.")
-      
-    st.write("Probability of being benign: ", f"{proba[0]:.2%}")
-    st.write("Probability of being malicious: ", f"{proba[1]:.2%}")
-    
-    st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
-  
-<<<<<<< HEAD
   st.write("Probability of being benign: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][0] * 100))
   st.write("Probability of being malignant: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][1] * 100))
+#   try:
+#     import warnings
+#     warnings.filterwarnings('ignore')
+# >>>>>>> 9036baf7e5670aca32c40c4234637e243e01dff0
+    
+#     # Get the absolute path to the model directory
+#     current_dir = os.path.dirname(os.path.abspath(__file__))
+#     parent_dir = os.path.dirname(current_dir)
+#     model_path = os.path.join(parent_dir, "model", "model.pkl")
+#     scaler_path = os.path.join(parent_dir, "model", "scaler.pkl")
+    
+#     # Load model and scaler with error handling
+#     try:
+#       with open(model_path, "rb") as model_file:
+#         model = pickle.load(model_file)
+#       with open(scaler_path, "rb") as scaler_file:
+#         scaler = pickle.load(scaler_file)
+#     except FileNotFoundError as e:
+#       st.error("Error: Model files not found. Please ensure model files are properly uploaded.")
+#       return
+#     except Exception as e:
+#       # Try to handle version incompatibility
+#       try:
+#         import joblib
+#         model = joblib.load(model_path)
+#         scaler = joblib.load(scaler_path)
+#       except Exception as joblib_error:
+#         st.error(f"Error loading model. Please ensure model compatibility: {str(e)}")
+#         return
+    
+#     # Convert input data to float32 for better compatibility
+#     input_array = np.array(list(input_data.values()), dtype=np.float32).reshape(1, -1)
+    
+#     try:
+#       input_array_scaled = scaler.transform(input_array)
+#     except Exception as scale_error:
+#       st.error("Error scaling input data. Please check input values.")
+#       return
+    
+#     try:
+#       prediction = model.predict(input_array_scaled)
+#       proba = model.predict_proba(input_array_scaled)[0]
+#     except Exception as pred_error:
+#       st.error("Error making prediction. Please check model compatibility.")
+#       return
+    
+#     st.subheader("Cell cluster prediction")
+#     st.markdown("<hr style='border: 1px solid #555;'>", unsafe_allow_html=True)
+#     st.write("The cell cluster is:")
+    
+#     if prediction[0] == 0:
+#       st.success("✅ The tumor is likely **Benign**.")
+#     else:
+#       st.error("⚠️ The tumor is likely **Malignant**.")
+      
+#     st.write("Probability of being benign: ", f"{proba[0]:.2%}")
+#     st.write("Probability of being malicious: ", f"{proba[1]:.2%}")
+    
+#     st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
   
-  st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
+# <<<<<<< HEAD
+#   st.write("Probability of being benign: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][0] * 100))
+#   st.write("Probability of being malignant: {:.2f}%".format(model.predict_proba(input_array_scaled)[0][1] * 100))
+  
+#   st.write("This app can assist medical professionals in making a diagnosis, but should not be used as a substitute for a professional diagnosis.")
 
-=======
-  except Exception as e:
-    st.error(f"An unexpected error occurred: {str(e)}")
-    return
->>>>>>> 9036baf7e5670aca32c40c4234637e243e01dff0
-
-
+# =======
+#   except Exception as e:
+#     st.error(f"An unexpected error occurred: {str(e)}")
+#     return
 def main():
   st.set_page_config(
     page_title="Breast Cancer Predictor",
