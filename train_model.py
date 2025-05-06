@@ -9,6 +9,7 @@ from sklearn.ensemble import VotingClassifier
 import joblib
 import os
 from concurrent.futures import ThreadPoolExecutor
+from learning_curves import plot_all_models_learning_curves
 
 # Create model directory if it doesn't exist
 if not os.path.exists('model'):
@@ -100,6 +101,17 @@ print(f"SVM: {svm_accuracy:.2%}")
 print(f"Logistic Regression: {lr_accuracy:.2%}")
 print(f"Ensemble Model: {voting_accuracy:.2%}")
 print("-" * 30)
+
+# Plot learning curves for all models
+print("\nGenerating learning curves...")
+models = {
+    'Random Forest': rf_model,
+    'SVM': svm_model,
+    'Logistic Regression': lr_model,
+    'Ensemble': voting_clf
+}
+plot_all_models_learning_curves(models, X_train_scaled, y_train)
+print("Learning curves generated!")
 
 # Save ensemble model and scaler
 print("Saving models...")
