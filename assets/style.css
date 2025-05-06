@@ -1,0 +1,42 @@
+.css-j5r0tf {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #7E99AB;
+}
+
+.diagnosis {
+  color: #fff;
+  padding: 0.2em 0.5em;
+  border-radius: 0.5em;
+}
+
+.diagnosis.benign {
+  background-color: #01DB4B
+}
+
+.diagnosis.malicious {
+  background-color: #ff4b4b
+}
+
+body {
+  background-color: #121212;
+  color: #f8f9fa;
+}
+
+.css-1aumxhk {
+  background-color: #1c1e22 !important;
+}
+
+.css-10trblm {
+  color: #f8f9fa !important;
+}
+
+.css-1dp5vir {
+  background-color: #ff4b4b !important;
+}
+
+.css-1n543e5 {
+  background-color: #01DB4B !important;
+  border-radius: 10px;
+  font-size: 16px;
+}
