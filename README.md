@@ -26,7 +26,7 @@ cd BreastCancer-Predictor
 
 For Windows:
 ```bash
-    pip install numpy pandas scikit-learn streamlit plotly pickle5 altair
+pip install numpy pandas scikit-learn streamlit plotly altair
 ```
 
 ```bash
@@ -76,6 +76,7 @@ http://localhost:8501
 - `data/data.csv`: Dataset for training
 - `model/`: Contains trained model files
 - `assets/`: CSS and other static files
+- `confusion_matrices/`: Contains model performance visualizations
 
 ## Usage
 1. Launch the application using the instructions above
@@ -165,6 +166,14 @@ pip install -r requirements.txt
 
 5. Port Already in Use:
 If port 8501 is in use, Streamlit will automatically try the next available port (8502, etc.)
+
+## Model Performance
+The application includes three machine learning models for breast cancer prediction:
+- Random Forest (96% accuracy)
+- Support Vector Machine (98% accuracy)
+- Logistic Regression (97% accuracy)
+
+Confusion matrices and detailed performance metrics for each model are available in the `confusion_matrices` directory.
 
 ## Warning
 This application is for educational purposes only and should not be used as a substitute for professional medical diagnosis.
