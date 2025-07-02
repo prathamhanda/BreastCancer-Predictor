@@ -1,5 +1,7 @@
 # Breast Cancer Predictor || [Live Preview](https://brcancer.streamlit.app/)
 
+![Breast Cancer Predictor Platform](https://res.cloudinary.com/dglcgpley/image/upload/v1751453007/banner_xplmkk.png)
+-- 
 A machine learning web application that predicts whether a breast mass is benign or malignant based on measurements from cytology lab results.
 
 ## Features
